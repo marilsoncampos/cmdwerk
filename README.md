@@ -1,2 +1,2 @@
 # xcmd_nest
-A set of tools to organize and document your personal scripts.
+A set of minimalist tools to organize and document your personal scripts.
