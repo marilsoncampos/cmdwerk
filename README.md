@@ -155,17 +155,8 @@ will produce the following results
 ![bins report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/pyenv_list.png)
 
 
-### Installation
 
-We recommend using Python 3.11 or above.
-To install use:
-
-```console
-$ pipx install cmd
-```
-
-
-### Usage
+### Command list
 
 Check the command line help using:
 
