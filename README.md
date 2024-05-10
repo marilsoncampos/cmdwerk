@@ -151,8 +151,8 @@ $ cmdw pyenv-list
 
 will produce the following results
 
-.. image:: _static/pyenv_list.png
-   :align: center
+
+![bins report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/pyenv_list.png)
 
 
 ### Installation
