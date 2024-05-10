@@ -124,7 +124,7 @@ $ cmdw bins
 
 will produce the following results
 
-![bins report](https://github.com/marilsoncampos/raw/master/docs/source/_static/list_all.png)
+![bins report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/list_all.png)
 
 
 5.2. List the scripts of a group with long details
@@ -135,8 +135,7 @@ $ cmdw bins --group git
 
 will produce the following results
 
-.. image:: _static/list_group.png
-   :align: center
+![bins group report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/list_group.png)
 
 
 #### 6. Commands to report on pyenv
