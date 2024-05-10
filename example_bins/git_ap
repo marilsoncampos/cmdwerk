@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CMDW_GROUP_NAME='git'
+DOC_STR=$(cat <<CMDW_DOC_MARKER
+Auto commit dir and push in dev.
+
+CMDW_DOC_MARKER
+)
+
+git add .
+echo "Changes -- "
+git diff --cached --exit-code
+git commit -m"Change to be squashed @ $(date '+%Y:-%m-%d %H:%M')"
+git push
+
+

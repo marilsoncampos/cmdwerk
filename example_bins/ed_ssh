@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+CMDW_GROUP_NAME='ssh'
+# CMDW_DOC_MARKER
+# Edits ssh config file.
+# CMDW_DOC_MARKER
+
+
+vi ~/.ssh/config

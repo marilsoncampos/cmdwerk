@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""
+A simple python password generator script configured for cmdwerk
+"""
+
+import random
+import string
+
+CMDW_GROUP_NAME='tools'
+# CMDW_DOC_MARKER
+# Generates passwords example.
+# CMDW_DOC_MARKER
+
+
+def generate_password(pass_length):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(random.choice(characters) for _ in range(pass_length))
+
+
+password = generate_password(15)
+print(f' Your new password is: {password}')

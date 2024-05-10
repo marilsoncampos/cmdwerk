@@ -1,0 +1,31 @@
+#!/bin/bash
+
+CMDW_GROUP_NAME='ssh'
+DOC_STR=$(cat <<CMDW_DOC_MARKER
+Lists ssh hosts defined in .ssh/config.
+
+CMDW_DOC_MARKER
+)
+
+# -- Color codes --
+black=0; red=1; green=2; yellow=3; blue=4; magenta=5; cyan=6; white=7;
+# -- No color codes --
+# black=8; red=8; green=8; yellow=8; blue=8; magenta=8; cyan=8; white=8;
+
+function color {
+    if [ "$1" = "8" ]; then
+        : # do nothing
+    elif [ "$#" -ne 1 ]; then
+        # reset color if no param.
+        echo -n `tput sgr0`
+    else
+        echo -n `tput setaf $1`
+    fi
+}
+
+
+color $yellow
+echo "SSH hosts:"
+color $magenta
+< ~/.ssh/config grep 'Host ' | cut -d' ' -f 2 | grep -v '*' | sed 's:^: :g'
+echo " "

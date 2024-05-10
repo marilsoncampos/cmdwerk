@@ -1,0 +1,84 @@
+[build-system]
+requires = ["flit_core>=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "cmdwerk"
+author = "Marilson Campos"
+author-email = "marilson.campos@gmail.com"
+home-page = "https://github.com/tonybaloney/wily"
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+]
+requires = [
+    "gitpython>=3.0.0,<4.0.0",
+    "colorlog>=6.7.0",
+    "click>=8.0,<9.0",
+    "tabulate>=0.9.0,<1.0.0",
+    "progress>=1.4,<2.0",
+]
+requires-python = ">=3.10"
+description-file = "README.md"
+
+[tool.flit.metadata.requires-extra]
+test = [
+    "pytest~=7.1.2",
+    "pytest-cov~=3.0.0",
+]
+dev = [
+    "bandit~=1.7.7",
+    "black~=24.4.2",
+    "codespell~=2.1.0",
+    "flake8~=4.0.1",
+    "flake8-bugbear~=22.7.1",
+    "flake8-comprehensions~=3.10.0",
+    "flake8-2020~=1.8.1",
+    "isort~=5.10.1",
+    "mypy~=1.10.0",
+    "pydocstyle~=6.2.1",
+    "pyupgrade~=2.37.1",
+    "safety~=2.1.0",
+]
+doc = []
+
+[tool.flit.metadata.urls]
+Documentation = "https://github.com/marilsoncampos/cmdwerk/tree/main"
+
+[tool.flit.sdist]
+include = ["doc/"]
+exclude = ["doc/*.html"]
+
+[tool.flit.scripts]
+# pyenv_list = "cmdwerk.cli:pyenvl"
+cmdw = "cmdwerk.main:main"
+
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "3.12"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+  | \.venv
+  | \.idea
+  | \.mypy_cache
+  | build/
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+ignore_missing_imports = true
+show_error_codes = true
+warn_unused_configs = true
+warn_unused_ignores = true
+

@@ -1,0 +1,7 @@
+sphinx
+click
+progress
+colorlog
+tabulate
+dataclasses
+gitpython
