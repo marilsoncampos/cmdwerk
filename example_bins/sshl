@@ -1,11 +1,11 @@
 #!/bin/bash
 
-CMDW_GROUP_NAME='ssh'
-DOC_STR=$(cat <<CMDW_DOC_MARKER
-Lists ssh hosts defined in .ssh/config.
-
-CMDW_DOC_MARKER
-)
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='ssh'
+# CMDW_HELP_BEGIN
+# Lists ssh hosts defined in .ssh/config.
+#
+# CMDW_HELP_END
 
 # -- Color codes --
 black=0; red=1; green=2; yellow=3; blue=4; magenta=5; cyan=6; white=7;

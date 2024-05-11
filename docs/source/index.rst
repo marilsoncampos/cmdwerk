@@ -1,5 +1,9 @@
 .. CMDWerk master.
 
+|
+
+.. image:: _static/cmdwerk.png
+   :align: center
 
 CMD Werk
 ++++++++
@@ -135,10 +139,28 @@ will produce the following results
    :align: center
 
 
-6. Commands to report on pyenv
-------------------------------
+6. Command to list registered scripts
+-------------------------------------
 
-6.1. Commands to list scripts
+This report has two parts:
+   a. List of registered scripts and the group its registered under.
+   b. List the scripts not registered.
+
+.. code-block:: console
+
+    $ cmdw check-bins
+
+will produce the following results
+
+.. image:: _static/registered_bins.png
+   :align: center
+
+
+
+7. Commands to report on pyenv versions
+---------------------------------------
+
+7.1. Commands to list scripts
 
 The list will include only the official python versions
 from version 3.7 or later.

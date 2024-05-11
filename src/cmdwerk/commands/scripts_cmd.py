@@ -1,5 +1,6 @@
 """
-Commands to organize and document your own scripts
+This module contains implementations script reporting related commands.
+
 Note: scrips need to be located inside the '~/bin' directory.
 """
 
@@ -8,12 +9,13 @@ from collections import defaultdict, OrderedDict
 from dataclasses import dataclass
 from .libs.gen_utils import write_screen_cols as write_screen
 from .libs.gen_utils import msg_and_exit
-from .libs.gen_utils import BLUE, CYAN, RED, ScreenPos
+from .libs.gen_utils import BLUE, YELLOW, CYAN, RED, ScreenPos
 from .libs.gen_utils import SCRIPT_PADDING, MAX_DESC, NUMBER_OF_COLS
 
 
-LOCAL_VAR_PREFIX = 'CMDW_'
-HERE_FILE_MARKER = 'CMDW_DOC_MARKER'
+CMDW_GROUP_TOKEN = 'CMDW_GROUP_NAME'
+CMDW_HELP_BEGIN = 'CMDW_HELP_BEGIN'
+CMDW_HELP_END = 'CMDW_HELP_END'
 
 
 
@@ -84,19 +86,11 @@ class ScriptManager:
         self.groups = defaultdict(list)
         self.buffer = []
         self.script_groups = None
+        self.misconfigured_scripts = []
         self.script_files = None
         self.script_dir = os.path.expanduser('~/bin')
         self.global_vars = OrderedDict()
 
-
-    @classmethod
-    def update_variable_values(cls, var_dict, line):
-        """Update variable values in the dictionary"""
-        line = line.strip().replace('\'', '')
-        parts = line.split('=')
-        if len(parts) == 2:
-            var_name, var_value = parts
-            var_dict[var_name.strip()] = var_value.strip()
 
 
     def load_script_info(self, script_name):
@@ -105,48 +99,44 @@ class ScriptManager:
         def clean_line(line_str: str) -> str:
             temp = line_str.strip('\n').replace('\'', '')
             if temp and temp[0] == '#':
-                temp = temp[1:]
+                temp = temp[1:].strip()
             return temp
 
         # pylint: disable=too-many-locals
-        variables = dict()
-        variables.update(self.global_vars)
+
         # -- State machine states --
-        st_inside_code = 'code'
-        st_short_hlp = 's_doc'
-        st_long_hlp = 'l_doc'
-        state = st_inside_code
-        if script_name.startswith('.'):
-            return None, None
-        short_hlp = None
-        long_hlp_lst = []
-        with (open(os.path.join(self.script_dir, script_name), 'r',
-                  encoding="utf-8") as in_file):
+        st_plain = 'plain'
+        st_inside_help = 'in_help'
+        state = st_plain
+
+        script_full_path = os.path.join(self.script_dir, script_name)
+        help_lines = []
+        group_name = 'No group'
+        with open(script_full_path, 'r', encoding="utf-8") as in_file:
             for raw_line in in_file:
                 line = clean_line(raw_line)
-                if state == st_inside_code:
-                    if line.startswith(LOCAL_VAR_PREFIX):
-                        self.update_variable_values(variables, raw_line)
-                    elif line.endswith(HERE_FILE_MARKER):
-                        state = st_short_hlp
-                elif state == st_long_hlp:
-                    if line.endswith(HERE_FILE_MARKER):
+                if state == st_plain:
+                    if line.startswith(CMDW_GROUP_TOKEN):
+                        parts = line.split('=')
+                        if len(parts) == 2:
+                            group_name = parts[1]
+                    elif line.startswith(CMDW_HELP_BEGIN):
+                        state = st_inside_help
+                else: # state == st_inside_help:
+                    if line.startswith(CMDW_HELP_END):
                         break
-                    long_hlp_lst.append(line)
-                else:
-                    short_hlp = line
-                    state = st_long_hlp
-        if not short_hlp:
+                    else:
+                        help_lines.append(line)
+
+
+        short_hlp = help_lines[0] if help_lines else ''
+        if short_hlp:
+            entry = ScriptRecord(
+                name=script_name, short_hlp=short_hlp, long_hlp='\n'.join(help_lines))
+            return group_name, entry
+        else:
             return None, None
-        long_hlp = '\n'.join(long_hlp_lst)
-        for v_name, v_value in variables.items():
-            token = '${{{0}}}'.format(v_name)
-            short_hlp = short_hlp.replace(token, v_value)
-            long_hlp = long_hlp.replace(token, v_value)
-        group_name = variables.get('CMDW_GROUP_NAME', 'No group')
-        entry = ScriptRecord(
-            name=script_name, short_hlp=short_hlp, long_hlp=long_hlp)
-        return group_name, entry
+
 
     def load_scripts_groups(self):
         """Loads scripts into groups."""
@@ -164,10 +154,15 @@ class ScriptManager:
         self.script_files = [
             f for f in os.listdir(self.script_dir)
             if os.path.isfile(os.path.join(self.script_dir, f))]
+        print(self.script_files)
+        self.script_files = filter(lambda x: not x.startswith('.'), self.script_files)
         for script_file in self.script_files:
             grp_name, entry = self.load_script_info(script_file)
             if grp_name:
                 add_script_to_group(grp_name, entry)
+            if not entry and not grp_name:
+                self.misconfigured_scripts.append(script_file)
+
 
     def list_short_help(self, filter_str=None):
         """List all groups and the scripts belonging to the group."""
@@ -236,6 +231,25 @@ class ScriptManager:
             columns.map(emit_script_entry)
         write_screen('\n')
 
+    def report_script_registrations(self):
+        self.load_scripts_groups()
+        write_screen(f' Registered scripts: \n', YELLOW)
+        for group, scripts in sorted(self.script_groups.items(), key=lambda x: x[0]):
+            for script in scripts:
+                write_screen(f'   {script.name} (group:{group})\n', CYAN)
+        write_screen('\n')
+        write_screen(f' Misconfigured scripts: \n', YELLOW)
+        max_size = max([len(x) for x in self.misconfigured_scripts]) + 2
+        num_cols = 120 // max_size
+        for idx, script in enumerate(self.misconfigured_scripts):
+            fmt_script = script.ljust(max_size)
+            write_screen(f'  {fmt_script}', RED)
+            if (idx+1) % num_cols == 0:
+                write_screen('\n')
+        write_screen('\n\n')
+
+
+
 
 class ScriptsCommands:
 
@@ -248,3 +262,8 @@ class ScriptsCommands:
     def cmd_bin_list(cls):
         manager = ScriptManager()
         manager.list_short_help()
+
+    @classmethod
+    def cmd_report_bin_registrations(cls):
+        manager = ScriptManager()
+        manager.report_script_registrations()

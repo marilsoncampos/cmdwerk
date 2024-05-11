@@ -6,10 +6,11 @@ A simple python password generator script configured for cmdwerk
 import random
 import string
 
-CMDW_GROUP_NAME='tools'
-# CMDW_DOC_MARKER
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='tools'
+# CMDW_HELP_BEGIN
 # Generates passwords example.
-# CMDW_DOC_MARKER
+# CMDW_HELP_END
 
 
 def generate_password(pass_length):

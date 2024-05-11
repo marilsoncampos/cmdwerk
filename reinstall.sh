@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh -e
 
 make
 pipx uninstall cmdwerk

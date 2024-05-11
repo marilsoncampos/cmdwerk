@@ -16,6 +16,7 @@ import os.path
 import sys
 
 sys.path.insert(0, os.path.abspath("../"))
+sys.path.insert(0, os.path.abspath("../../../src/cmdwerk"))
 
 # -- Project information -----------------------------------------------------
 
@@ -25,8 +26,7 @@ author = "Marilson Campos"
 
 # The short X.Y version
 
-# import cmdwerk
-# version = cmdwerk.__version__
+# print(cmdwerk.__version__)
 version = "0.1.0"
 # The full version, including alpha/beta/rc tags
 release = "develop"
@@ -58,8 +58,9 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-# html_theme = "alabaster"
-html_theme = "furo"
+html_theme = "alabaster"
+# html_theme = "furo"
+
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -89,8 +90,10 @@ html_static_path = ["_static"]
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-html_sidebars = {}
-
+# html_sidebars = {}
+html_sidebars = {
+    '**': []
+}
 
 # -- Options for HTMLHelp output ---------------------------------------------
 

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-
-CMDW_GROUP_NAME='ssh'
-# CMDW_DOC_MARKER
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='ssh'
+# CMDW_HELP_BEGIN
 # Edits ssh config file.
-# CMDW_DOC_MARKER
+# CMDW_HELP_END
 
 
 vi ~/.ssh/config

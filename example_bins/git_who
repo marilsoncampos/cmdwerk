@@ -1,25 +1,18 @@
 #!/bin/bash
 
-# Configuration used by the cmdwerk.
-CMDW_GROUP_NAME='git'
-
-
-function help {
-cat <<CMDW_DOC_MARKER
-Shows users that changed a subdir.
-
-Usage: 
-  Cd into the base directory.
-  Call the program passing the name of the subdir you want to query.
-  >  git_who <dag_dir>
-
-  Example: git_who de_bigquery_extract_daily_v16
-
-CMDW_DOC_MARKER
-}
-
-# End
-
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='git'
+# CMDW_HELP_BEGIN
+# Shows users that changed a subdir.
+#
+# Usage:
+#   Cd into the base directory.
+#   Call the program passing the name of the subdir you want to query.
+#   >  git_who <dag_dir>
+#
+#   Example: git_who de_bigquery_extract_daily_v16
+#
+# CMDW_HELP_END
 
 # How many months to look back.
 MONTHS_BACK=9
