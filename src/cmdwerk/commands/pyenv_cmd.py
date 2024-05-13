@@ -3,12 +3,12 @@ This module contains implementations for listing available python versions in Py
 """
 
 import subprocess
-from .libs.gen_utils import YELLOW, CYAN, RED, ScreenPos
+from .libs.gen_utils import YELLOW
 from .libs.gen_utils import write_screen_cols as write_screen
 
+
 class PyEnvHelperCommands:
-    """PyEnv helper commands available:
-        - List python versions available in a compact format.
+    """PyEnv helper commands class defining the pyenv related command calls.
     """
 
     @classmethod
@@ -37,9 +37,8 @@ class PyEnvHelperCommands:
                 result.append(line)
         return result
 
-
     @classmethod
-    def list_formatted(cls):
+    def list_python_versions(cls):
         cmd = cls()
         version_list = cmd.get_list_python_versions()
         last_major = None
@@ -57,7 +56,3 @@ class PyEnvHelperCommands:
             last_major = major
             last_minor = minor
         print('\n\n')
-
-
-
-

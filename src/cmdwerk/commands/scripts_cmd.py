@@ -12,19 +12,18 @@ from .libs.gen_utils import msg_and_exit
 from .libs.gen_utils import BLUE, YELLOW, CYAN, RED, ScreenPos
 from .libs.gen_utils import SCRIPT_PADDING, MAX_DESC, NUMBER_OF_COLS
 
-
+# Document marker Tokens
 CMDW_GROUP_TOKEN = 'CMDW_GROUP_NAME'
 CMDW_HELP_BEGIN = 'CMDW_HELP_BEGIN'
 CMDW_HELP_END = 'CMDW_HELP_END'
 
 
-
 @dataclass
 class ScriptRecord:
-    """Helper class to store script."""
+    """Helper class to store script information."""
     name: str
-    short_hlp: str
-    long_hlp: str
+    short_help: str
+    long_help: str
 
 
 class ColumnPrinter:
@@ -91,8 +90,6 @@ class ScriptManager:
         self.script_dir = os.path.expanduser('~/bin')
         self.global_vars = OrderedDict()
 
-
-
     def load_script_info(self, script_name):
         """Extracts the description and group"""
 
@@ -103,40 +100,36 @@ class ScriptManager:
             return temp
 
         # pylint: disable=too-many-locals
-
         # -- State machine states --
-        st_plain = 'plain'
+        st_outside_help = 'out_help'
         st_inside_help = 'in_help'
-        state = st_plain
-
+        state = st_outside_help
         script_full_path = os.path.join(self.script_dir, script_name)
         help_lines = []
         group_name = 'No group'
         with open(script_full_path, 'r', encoding="utf-8") as in_file:
             for raw_line in in_file:
                 line = clean_line(raw_line)
-                if state == st_plain:
+                if state == st_outside_help:
                     if line.startswith(CMDW_GROUP_TOKEN):
                         parts = line.split('=')
                         if len(parts) == 2:
                             group_name = parts[1]
                     elif line.startswith(CMDW_HELP_BEGIN):
                         state = st_inside_help
-                else: # state == st_inside_help:
+                else:  # Case for state == st_inside_help:
                     if line.startswith(CMDW_HELP_END):
                         break
                     else:
                         help_lines.append(line)
 
-
         short_hlp = help_lines[0] if help_lines else ''
         if short_hlp:
             entry = ScriptRecord(
-                name=script_name, short_hlp=short_hlp, long_hlp='\n'.join(help_lines))
+                name=script_name, short_help=short_hlp, long_help='\n'.join(help_lines))
             return group_name, entry
         else:
             return None, None
-
 
     def load_scripts_groups(self):
         """Loads scripts into groups."""
@@ -163,13 +156,12 @@ class ScriptManager:
             if not entry and not grp_name:
                 self.misconfigured_scripts.append(script_file)
 
-
     def list_short_help(self, filter_str=None):
         """List all groups and the scripts belonging to the group."""
 
         def emit_script_entry(entry_record):
             script_name = entry_record.name.rjust(SCRIPT_PADDING)
-            short_hlp = entry_record.short_hlp
+            short_hlp = entry_record.short_help
             short_hlp = short_hlp.ljust(MAX_DESC)
             if len(short_hlp) > MAX_DESC:
                 short_hlp = short_hlp[:MAX_DESC-3] + '...'
@@ -204,9 +196,9 @@ class ScriptManager:
 
         def emit_script_entry(entry_record):
             script_name = entry_record.name.rjust(SCRIPT_PADDING) + '  '
-            short_hlp = entry_record.short_hlp
+            short_hlp = entry_record.short_help
             filer_str = ' ' * len(script_name)
-            long_hlp_lst = entry_record.long_hlp.split('\n')
+            long_hlp_lst = entry_record.long_help.split('\n')
             write_screen(script_name, BLUE)
             write_screen(short_hlp + '\n', CYAN)
             for line in long_hlp_lst:
@@ -247,8 +239,6 @@ class ScriptManager:
             if (idx+1) % num_cols == 0:
                 write_screen('\n')
         write_screen('\n\n')
-
-
 
 
 class ScriptsCommands:

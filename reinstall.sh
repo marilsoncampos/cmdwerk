@@ -1,5 +1,8 @@
 #!/bin/zsh -e
 
+
 make
 pipx uninstall cmdwerk
-pipx install dist/cmdwerk-0.1.0.tar.gz
+PACKAGE_FILE=$(ls dist/*.whl | grep cmdwerk | head -n 1)
+pipx install $PACKAGE_FILE
+

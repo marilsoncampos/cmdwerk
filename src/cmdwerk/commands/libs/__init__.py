@@ -1,3 +1,3 @@
 """
-Command Libraries
+Command Libraries Module
 """

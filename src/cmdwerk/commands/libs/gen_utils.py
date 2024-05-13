@@ -47,6 +47,7 @@ HAS_COLORS = has_colors(sys.stdout)
 
 
 def write_error(error_msg):
+    """Writes an error message"""
     write_screen(" ERROR: {0}\n".format(error_msg))
 
 
@@ -115,12 +116,10 @@ def run_bash_command(cmd_list):
         result = subprocess.run(cmd_list, capture_output=True, cwd=os.getcwd())
     except TypeError:
         return -1, '', ''
-
     stdout = result.stdout.decode("utf-8").split('\n')
     stderr = result.stderr.decode("utf-8").split('\n')
     ret_code = result.returncode
     return ret_code, stdout, stderr
-
 
 
 def read_txt_file(file_name):
@@ -128,3 +127,9 @@ def read_txt_file(file_name):
     with open(file_name, 'r') as f_handle:
         lines = f_handle.readlines()
     return [x.strip('\n') for x in lines]
+
+
+def safe_make_dir(dir_path: str):
+    """Makes a directory if it does not exist."""
+    expanded_dir_path = os.path.expanduser(dir_path)
+    os.makedirs(expanded_dir_path, exist_ok=True)

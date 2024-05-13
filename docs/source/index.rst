@@ -1,27 +1,33 @@
-.. CMDWerk master.
 
 |
 
 .. image:: _static/cmdwerk.png
    :align: center
 
-CMD Werk
-++++++++
+.
+#
+
 
 1. Introduction
 ---------------
-CmdWerk is a minimalist tool to help manage your personal scripts.
-It has capabilities to extend with the modules. As an example we
-include a module to emit a compact pyenv version report.
 
-Your shell scripts should be stored in your $HOME/bin.
-Using CmdWerk you can organize them as groups.
+We engineers face with the need to increase development productivity and keep our scripts organized.
+
+CmdWerk is a minimalist approach to help manage your personal scripts.
+
+The code base allows you to register your scripts and also makes it easy to add new modules to the
+tool.
+
+As an example we included a module to emit a compact pyenv version report.
+
+The scripts to be registered should be stored in your $HOME/bin.
 
 
 2. Getting Started
 ------------------
 
-Use this command to package the project and install the newly built package in pipx with this command.
+Use this command to package the project and install the newly built package.
+We recommend using pipx to keep the tool available across virtual environments.
 
 .. code-block:: console
 
@@ -34,7 +40,9 @@ Here are the commands included in the reinstall.sh
     #!/bin/bash
     make
     pipx uninstall cmdwerk
-    pipx install dist/cmdwerk-0.1.0.tar.gz
+    PACKAGE_FILE=$(ls dist/*.gz | grep cmdwerk | head -n 1)
+    pipx install $PACKAGE_FILE
+dist/cmdwerk-0.1.0.tar.gz
 
 3. Adapting bash scripts to appear on reports
 ---------------------------------------------

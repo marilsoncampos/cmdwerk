@@ -16,20 +16,18 @@ import os.path
 import sys
 
 sys.path.insert(0, os.path.abspath("../"))
-sys.path.insert(0, os.path.abspath("../../../src/cmdwerk"))
 
 # -- Project information -----------------------------------------------------
 
-project = "CmdWerk"
+project = "Cmd Werk"
 copyright = "2024, Marilson Campos"
 author = "Marilson Campos"
 
 # The short X.Y version
-
 # print(cmdwerk.__version__)
 version = "0.1.0"
 # The full version, including alpha/beta/rc tags
-release = "develop"
+release = "alpha"
 
 
 # -- General configuration ---------------------------------------------------
@@ -58,8 +56,9 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
+# html_theme = "alabaster"
 # html_theme = "furo"
+html_theme = "haiku"
 
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -108,7 +107,7 @@ latex_elements = {
 }
 
 latex_documents = [
-    (master_doc, "cmdwerk.tex", "cmdwerk Documentation", "Marilson Campos", "manual")
+    (master_doc, "cmdwerk.tex", "Cmdwerk ", "Marilson Campos", "manual")
 ]
 
 
@@ -116,7 +115,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "cmdwerk", "cmdwerk Documentation", [author], 1)]
+man_pages = [(master_doc, "cmdwerk", "cmdwerk", [author], 1)]
 
 
 # -- Options for Texinfo output ----------------------------------------------
@@ -125,7 +124,7 @@ texinfo_documents = [
     (
         master_doc,
         "cmdwerk",
-        "cmdwerk Documentation",
+        "cmdwerk",
         author,
         "cmdwerk",
         "cmdwerk project.",
@@ -139,9 +138,6 @@ texinfo_documents = [
 # Bibliographic Dublin Core info.
 epub_title = project
 epub_exclude_files = ["search.html"]
-
-
-# -- Extension configuration -------------------------------------------------
 
 # -- Options for todo extension ----------------------------------------------
 

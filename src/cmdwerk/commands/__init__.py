@@ -1,3 +1,3 @@
 """
-Commands definitions
+Commands module
 """
