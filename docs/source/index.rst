@@ -147,8 +147,7 @@ will produce the following results
    :align: center
 
 
-6. Command to list registered scripts
--------------------------------------
+5.3. Report the status of script registrations
 
 This report has two parts:
    a. List of registered scripts and the group its registered under.
@@ -156,7 +155,7 @@ This report has two parts:
 
 .. code-block:: console
 
-    $ cmdw check-bins
+    $ cmdw bins status
 
 will produce the following results
 
@@ -165,10 +164,10 @@ will produce the following results
 
 
 
-7. Commands to report on pyenv versions
+6. Commands to report on pyenv versions
 ---------------------------------------
 
-7.1. Commands to list scripts
+6.1. Commands to list scripts
 
 The list will include only the official python versions
 from version 3.7 or later.
