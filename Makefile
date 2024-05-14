@@ -7,11 +7,11 @@ build: ## Builds package using flit
 install: ## Install package using flit
 	flit install
 
-unit-test: ## Run pytest suite for the package
-	@ cd ./test/unit
-	pytest
+tests: ## Run pytest suite for the package
+	@cd src/test
+	pytest ./
 
-code-check: ## Check code base with pylint
+checks: ## Check code base with pylint
 	pylint  src/cmdwerk
 
 
