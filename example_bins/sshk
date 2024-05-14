@@ -3,9 +3,11 @@
 # -- Cmd Werk Config --
 # CMDW_GROUP_NAME='aws & ssh'
 # CMDW_HELP_BEGIN
-# Lists ssh hosts defined in .ssh/config.
-#
+# Lists the ssh keyfiles.
 # CMDW_HELP_END
+
+
+pushd  ~/.ssh > /dev/null
 
 # -- Color codes --
 black=0; red=1; green=2; yellow=3; blue=4; magenta=5; cyan=6; white=7;
@@ -25,7 +27,13 @@ function color {
 
 
 color $yellow
-echo "SSH hosts:"
+echo "SSH Key files:"
+# TMP_FILE=$(mktemp)
+
 color $magenta
-< ~/.ssh/config grep 'Host ' | cut -d' ' -f 2 | grep -v '*' | sed 's:^: :g'
-echo " "
+ls -1 ./*.pub
+ls -1 ./*.pem
+
+
+popd > /dev/null
+

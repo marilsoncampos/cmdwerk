@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='aws & ssh'
+# CMDW_HELP_BEGIN
+# List my reserved instances on AWS.
+# CMDW_HELP_END
+
+aws ec2 describe-instances --output text --query "Reservations[].Instances[].InstanceId"

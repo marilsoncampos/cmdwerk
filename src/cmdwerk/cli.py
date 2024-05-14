@@ -1,31 +1,42 @@
+# pylint: disable=anomalous-backslash-in-string, too-few-public-methods
+"""
+
+ CmdWerk - A minimalist tool for developer productivity
+
+"""
+# pylint: enable=anomalous-backslash-in-string
+
 import click
 from .commands.pyenv_cmd import PyEnvHelperCommands
-from .commands.scripts_cmd import ScriptsCommands
+from .commands.bins_cmd import ScriptsCommands
 from .commands.prompt_cmd import PromptCommand
 from . import __version__ as app_version
-from . import PROGRAM_NAME
+from . import __title__ as app_title
+from . import __description__ as app_description
 
-PROGRAM_MSG = f'{PROGRAM_NAME}, version {app_version},  A tool to manage local scripts.'
-EPILOG = f'{PROGRAM_NAME} {app_version}'
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+PROGRAM_MSG = f'{app_title}, version {app_version},  {app_description}.'
+EPILOG = f'{app_title} {app_version}'
+CONTEXT_SETTINGS = {"help_option_names": ['-h', '--help']}
 
 
-class CustomHelpGroup(click.Group):
-    def format_help(self, ctx, formatter):
-        parent = ctx.parent
-        help_text = ['X Options:']
-        for param in parent.command.get_params(ctx):
-            help_text.append(' '.join(param.get_help_record(parent)))
-        help_text.append("\n" + ctx.get_usage() + "\n")
-        help_text.append('Commands:\n')
-        help_text.extend([f'{command_name}' for command_name, command in self.commands.items()])
-        formatter.write('\n'.join(help_text))
+# class CustomHelpGroup(click.Group):
+#     """A custom help group to show sub-command help"""
+#     def format_help(self, ctx, formatter):
+#         """Custom help formatter"""
+#         parent = ctx.parent
+#         help_text = ['X Options:']
+#         for param in parent.command.get_params(ctx):
+#             help_text.append(' '.join(param.get_help_record(parent)))
+#         help_text.append("\n" + ctx.get_usage() + "\n")
+#         help_text.append('Commands:\n')
+#         help_text.extend([f'{command_name}' for command_name, command in self.commands.items()])
+#         formatter.write('\n'.join(help_text))
 
 
 @click.version_option(app_version, "--version", "-v", message=PROGRAM_MSG)
 @click.group(epilog=EPILOG, context_settings=CONTEXT_SETTINGS)
 def main():
-    pass
+    """The main command line interface group."""
 
 
 # TODO: Try to expand sub-command help into main using: @main.group(cls=CustomHelpGroup)
@@ -48,7 +59,7 @@ def bins(sub_cmd: str, group: str):
     """
     if sub_cmd == 'status':
         ScriptsCommands.cmd_report_bin_registrations()
-        return 0
+        return
     # default argument makes it to list script help
     if group == '':
         ScriptsCommands.cmd_bin_list()

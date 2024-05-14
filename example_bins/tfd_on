@@ -1,0 +1,15 @@
+#!/bin/zsh 
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='other'
+# CMDW_HELP_BEGIN
+# Starts book docker host.
+# CMDW_HELP_END
+
+BASE_DIR="${HOME}/d0/learn/dl_book"
+docker run -p 8888:8888 -p 6006:6006 -v "${BASE_DIR}":/notebooks  --platform linux/amd64 -it oduerr/dl_book_docker
+
+
+# URL='http://localhost:8888/?token=tensorchiefs'
+# open "$URL"
+

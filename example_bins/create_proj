@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='other'
+# CMDW_HELP_BEGIN
+# Create a python project from a template.
+# CMDW_HELP_END
+
+cookiecutter /Users/mcampos/d0/cookiecutter_setup/hyper-py.zip
+
+

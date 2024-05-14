@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='aws & ssh'
+# CMDW_HELP_BEGIN
+# Loads environment variables with AWS credentials.
+# CMDW_HELP_END
+
+
+export AWS_ACCESS_KEY_ID=$(grep AWSAccessKeyId < credentials | cut -d'=' -f 2)
+export AWS_SECRET_ACCESS_KEY=$(grep AWSSecretKey < credentials | cut -d'=' -f 2)
+
+

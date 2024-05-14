@@ -19,6 +19,7 @@ from ..commands.libs.gen_utils import safe_make_dir
 
 HISTORY_DATA_FILE = 'history.bin'
 KEY_SEPARATOR = '|_|'
+DEBUG = False
 
 
 def build_cmd_key(parts):
@@ -79,6 +80,7 @@ def bottom_toolbar():
     return [("class:bottom-toolbar", "Type 'q' to exit")]
 
 
+# pylint: disable=too-few-public-methods
 class CustomHistoryCompleter(Completer):
     """Custom completion class that completes from history data"""
     def __init__(self, completion_dict):
@@ -87,6 +89,7 @@ class CustomHistoryCompleter(Completer):
         super().__init__()
 
     def _build_first_completion_dict(self):
+        """Build first completion using substrings ."""
         first_cmds = {x.split(KEY_SEPARATOR)[0] for x in self.completion_dict}
         result = defaultdict(set)
         for cmd in first_cmds:
@@ -96,7 +99,8 @@ class CustomHistoryCompleter(Completer):
                     result[token].add(cmd)
         return result
 
-    def get_completions(self, document, complete_event):
+    def get_completions(self, document, _):
+        """Yield the possible completions for the current text."""
         word = document.get_word_before_cursor()
         text_so_far = document.text
         parts = shlex.split(text_so_far)
@@ -115,6 +119,7 @@ class CustomHistoryCompleter(Completer):
                 candidates = self.completion_dict[curr_key]
                 for candidate in candidates:
                     yield Completion(candidate, start_position=-len(word))
+
 
 def prompt_history_from_data(history_data):
     """
@@ -159,7 +164,7 @@ class PromptCommand:
         history_data = build_history_data(history_lines)
         with open(output_file, 'wb') as history_fh:
             pickle.dump(history_data, history_fh)
-        print('Saved history data to {}'.format(output_file))
+        print(f'Saved history data to {output_file}')
         print(f'History lines : {len(history_lines)}')
         print(f'Loading errors: {loading_errors}')
 
@@ -177,7 +182,8 @@ class PromptCommand:
             print('ERROR: History file not found.')
             print(' - To create it, use the command: cmdw ppt sync ')
             return
-        for key in sorted(history_data.keys()):
-            value = history_data[key]
-            print(key, value)
+        if DEBUG:
+            for key in sorted(history_data.keys()):
+                value = history_data[key]
+                print(key, value)
         prompt_history_from_data(history_data)

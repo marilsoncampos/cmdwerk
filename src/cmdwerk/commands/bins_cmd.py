@@ -120,16 +120,14 @@ class ScriptManager:
                 else:  # Case for state == st_inside_help:
                     if line.startswith(CMDW_HELP_END):
                         break
-                    else:
-                        help_lines.append(line)
+                    help_lines.append(line)
 
         short_hlp = help_lines[0] if help_lines else ''
         if short_hlp:
             entry = ScriptRecord(
-                name=script_name, short_help=short_hlp, long_help='\n'.join(help_lines))
+                name=script_name, short_help=short_hlp, long_help='\n'.join(help_lines[1:]))
             return group_name, entry
-        else:
-            return None, None
+        return None, None
 
     def load_scripts_groups(self):
         """Loads scripts into groups."""
@@ -143,11 +141,10 @@ class ScriptManager:
             temp.append(script_entry)
             self.script_groups[the_group] = temp
 
-        self.script_groups = dict()
+        self.script_groups = {}
         self.script_files = [
             f for f in os.listdir(self.script_dir)
             if os.path.isfile(os.path.join(self.script_dir, f))]
-        print(self.script_files)
         self.script_files = filter(lambda x: not x.startswith('.'), self.script_files)
         for script_file in self.script_files:
             grp_name, entry = self.load_script_info(script_file)
@@ -176,7 +173,7 @@ class ScriptManager:
         for key in sorted_keys:
             if (filter_str is not None) and (filter_str not in key):
                 continue
-            write_screen("{0}".format(key), RED, ScreenPos.CENTERED)
+            write_screen(f"{key}", RED, ScreenPos.CENTERED)
             sorted_scripts = sorted(
                 self.script_groups[key], key=lambda ent: ent.name)
             columns.reset()
@@ -210,8 +207,8 @@ class ScriptManager:
         columns = ColumnPrinter(1)
         group = self.script_groups.get(group_name, None)
         if not group:
-            msg_and_exit('Group "{0}" not found'.format(group_name))
-        write_screen("{0}".format(group_name), RED, pos=ScreenPos.SEPARATOR)
+            msg_and_exit(f'Group "{group_name}" not found')
+        write_screen(f"{group_name}", RED, pos=ScreenPos.SEPARATOR)
         sorted_scripts = sorted(group, key=lambda ent: ent.name)
         columns.reset()
         for a_script in sorted_scripts:
@@ -224,14 +221,17 @@ class ScriptManager:
         write_screen('\n')
 
     def report_script_registrations(self):
+        """
+        List the scripts reporting what group are they registered or if misconfigured.
+        """
         self.load_scripts_groups()
-        write_screen(f' Registered scripts: \n', YELLOW)
+        write_screen(' Registered scripts: \n', YELLOW)
         for group, scripts in sorted(self.script_groups.items(), key=lambda x: x[0]):
             for script in scripts:
                 write_screen(f'   {script.name} (group:{group})\n', CYAN)
         write_screen('\n')
-        write_screen(f' Misconfigured scripts: \n', YELLOW)
-        max_size = max([len(x) for x in self.misconfigured_scripts]) + 2
+        write_screen(' Misconfigured scripts: \n', YELLOW)
+        max_size = max(len(x) for x in self.misconfigured_scripts) + 2
         num_cols = 120 // max_size
         for idx, script in enumerate(self.misconfigured_scripts):
             fmt_script = script.ljust(max_size)
@@ -242,18 +242,21 @@ class ScriptManager:
 
 
 class ScriptsCommands:
-
+    """Command service for script management."""
     @classmethod
     def cmd_bin_group(cls, group_name):
+        """List the scripts belonging to the group."""
         manager = ScriptManager()
         manager.list_long_help(group_name)
 
     @classmethod
     def cmd_bin_list(cls):
+        """List all the scripts."""
         manager = ScriptManager()
         manager.list_short_help()
 
     @classmethod
     def cmd_report_bin_registrations(cls):
+        """Report scripts registration status."""
         manager = ScriptManager()
         manager.report_script_registrations()

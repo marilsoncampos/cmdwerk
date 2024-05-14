@@ -1,4 +1,6 @@
-
+#
+# Make file for creating documentation.
+#
 # Params .
 SPHINX_OPTS    =
 SPHINX_BUILD   = sphinx-build

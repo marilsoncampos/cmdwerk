@@ -15,7 +15,7 @@ class PyEnvHelperCommands:
     def get_list_python_versions(cls):
         """Collects the official python versions available."""
         cmd = ["pyenv", "install", "-l"]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, text=True)
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, text=True, check=False)
         payload = res.stdout
         if res.returncode != 0:
             print('Failed to get pyenv versions')
@@ -39,6 +39,7 @@ class PyEnvHelperCommands:
 
     @classmethod
     def list_python_versions(cls):
+        """List the python versions available."""
         cmd = cls()
         version_list = cmd.get_list_python_versions()
         last_major = None
@@ -46,9 +47,9 @@ class PyEnvHelperCommands:
         print(' ')
         write_screen('-- Pyenv python versions --', YELLOW)
         print(' ')
-        for v in version_list:
-            (major, minor, release) = v.split('.')
-            version_fmt = f'{v:<9}'
+        for version in version_list:
+            (major, minor, _) = version.split('.')
+            version_fmt = f'{version:<9}'
             if major is not None and (major == last_major and minor == last_minor):
                 print(version_fmt, end='')
             else:

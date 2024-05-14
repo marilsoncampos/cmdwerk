@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # -- Cmd Werk Config --
-# CMDW_GROUP_NAME='ssh'
+# CMDW_GROUP_NAME='aws & ssh'
 # CMDW_HELP_BEGIN
 # Edits ssh config file.
 # CMDW_HELP_END
-
 
 vi ~/.ssh/config

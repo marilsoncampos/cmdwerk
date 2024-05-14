@@ -1,0 +1,20 @@
+#!/bin/zsh 
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='jupyter'
+# CMDW_HELP_BEGIN
+# Start jupyter docker.
+# CMDW_HELP_END
+
+LOG_FILE=/var/tmp/jupyter.txt
+jup_launch /dev/null &  
+
+W=10
+for _ in {1..${W}}; do echo -n "\u25CC "; sleep 1;  done;  echo ' '
+
+
+JUP_URL=$(grep -v ServerApp < "$LOG_FILE" | grep 'http://127.0.0.1:8888/lab' | rev | cut -d' ' -f 1 | rev)
+echo "$JUP_URL"
+
+open "$JUP_URL"
+

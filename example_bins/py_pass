@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-A simple python password generator script configured for cmdwerk
+An example of script in python for cmdwerk
+Implements simple python password generator
 """
 
 import random
 import string
 
 # -- Cmd Werk Config --
-# CMDW_GROUP_NAME='tools'
+# CMDW_GROUP_NAME='other'
 # CMDW_HELP_BEGIN
 # Generates passwords example.
 # CMDW_HELP_END

@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='other'
+# CMDW_HELP_BEGIN
+# Stop book docker host.
+# CMDW_HELP_END
+
+DOC_INSTANCE=$(docker ps | grep dl_book_docker | cut -d' ' -f 1)
+
+if [ -z "$DOC_INSTANCE" ]; then
+    echo "Server is not running!"
+else 
+    docker stop "$DOC_INSTANCE"
+fi
+

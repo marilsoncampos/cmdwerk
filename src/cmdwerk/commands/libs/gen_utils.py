@@ -48,15 +48,15 @@ HAS_COLORS = has_colors(sys.stdout)
 
 def write_error(error_msg):
     """Writes an error message"""
-    write_screen(" ERROR: {0}\n".format(error_msg))
+    write_screen(f" ERROR: {error_msg}\n")
 
 
 def msg_and_exit(msg, stderr=None):
     """Prints a message and exits the program with error code"""
-    sys.stdout.write(' ERROR: {0}\n'.format(msg))
+    sys.stdout.write(f' ERROR: {msg}\n')
     if stderr:
         for line in stderr:
-            sys.stdout.write('{0}\n'.format(line))
+            sys.stdout.write(f'{line}\n')
     sys.stdout.flush()
     sys.exit(-1)
 
@@ -64,6 +64,12 @@ def msg_and_exit(msg, stderr=None):
 def yes_no(bool_value):
     """Returns 'Yes' if true and 'No' otherwise."""
     return 'Yes' if bool_value else 'No'
+
+
+def encode_msg(msg_str, color):
+    """Encode String with color"""
+    # pylint: disable=consider-using-f-string
+    return "\x1b[1;%dm" % (30 + color) + msg_str + "\x1b[0m"
 
 
 def write_screen(text, color=WHITE, pos=ScreenPos.PLAIN, skip_line=False):
@@ -80,8 +86,9 @@ def write_screen(text, color=WHITE, pos=ScreenPos.PLAIN, skip_line=False):
     if skip_line:
         msg = '\n' + msg
     if HAS_COLORS:
-        seq = "\x1b[1;%dm" % (30 + color) + msg + "\x1b[0m"
-        sys.stdout.write(seq)
+        # seq = f"\x1b[1;%{30 + color}m{msg}\x1b[0m"
+        # seq = "\x1b[1;%dm" % (30 + color) + msg + "\x1b[0m"
+        sys.stdout.write(encode_msg(msg, color))
     else:
         sys.stdout.write(msg)
 
@@ -102,8 +109,10 @@ def write_screen_cols(
     else:
         msg = text
     if HAS_COLORS:
-        seq = "\x1b[1;%dm" % (30 + color) + msg + "\x1b[0m"
-        sys.stdout.write(seq)
+        # seq = f"\x1b[1;%{30 + color}m{msg}\x1b[0m"
+        # sys.stdout.write(seq)
+        # seq = "\x1b[1;%dm" % (30 + color) + msg + "\x1b[0m"
+        sys.stdout.write(encode_msg(msg, color))
     else:
         sys.stdout.write(text)
 
@@ -124,7 +133,7 @@ def run_bash_command(cmd_list):
 
 def read_txt_file(file_name):
     """Loads the contents of file and returns it as a list of strings."""
-    with open(file_name, 'r') as f_handle:
+    with open(file_name, 'r', encoding='UTF-8') as f_handle:
         lines = f_handle.readlines()
     return [x.strip('\n') for x in lines]
 

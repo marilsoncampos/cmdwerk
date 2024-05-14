@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='jupyter'
+# CMDW_HELP_BEGIN
+# Stop jupyter docker.
+# CMDW_HELP_END
+
+DOC_INSTANCE=$(docker ps | grep jupyter | cut -d' ' -f 1)
+
+if [ -z "$DOC_INSTANCE" ]; then
+    echo "Jupyter server is not running!" 
+else 
+    docker stop "$DOC_INSTANCE"
+fi
+

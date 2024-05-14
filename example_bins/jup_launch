@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='jupyter'
+# CMDW_HELP_BEGIN
+# Internal call to manipulate Jupyter/docker.
+# CMDW_HELP_END
+
+LOG_FILE=/var/tmp/jupyter.txt
+printf " Launch at %s \n" % "${DATE}" > $LOG_FILE
+
+docker run -i --rm -p 8888:8888 -v "$(pwd)":/home/jovyan/work jupyter/datascience-notebook >> $LOG_FILE 2>&1
+

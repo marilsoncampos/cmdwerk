@@ -7,7 +7,6 @@
 #
 # CMDW_HELP_END
 
-
 echo "Changes -- "
 git diff --cached --exit-code
 git commit -m"Change to be squashed @ $(date '+%Y:-%m-%d %H:%M')"

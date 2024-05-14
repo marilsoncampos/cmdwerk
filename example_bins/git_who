@@ -20,17 +20,16 @@ MONTHS_BACK=9
 # Little Bash script that show users that changed a dag
 # -- Color codes --
 black=0; red=1; green=2; yellow=3; blue=4; magenta=5; cyan=6; white=7;
-# -- No color codes --
-# black=8; red=8; green=8; yellow=8; blue=8; magenta=8; cyan=8; white=8;
+
 
 function color {
     if [ "$1" = "8" ]; then
         : # do nothing
     elif [ "$#" -ne 1 ]; then
         # reset color if no param.
-        echo -n `tput sgr0`
+        echo -n "$(tput sgr0)"
     else
-        echo -n `tput setaf $1`
+        echo -n "$(tput setaf "$1")"
     fi
 }
 
@@ -38,7 +37,7 @@ function color {
 if [ "$#" -ne 1 ]; then
     color $yellow
     echo " "
-    echo `basename $0`
+    basename "$0"
     echo " "
     color $blue
     help
@@ -53,11 +52,11 @@ echo " "
 color $yellow
 echo "--- Last ${MONTHS_BACK} months ---"
 color $blue
-git shortlog -s $1 --since="${MONTHS_BACK} months ago" | sort -n -r | head -n 4
+git shortlog -s "$1" --since="${MONTHS_BACK} months ago" | sort -n -r | head -n 4
 echo " "
 
 color $yellow
 echo "--- All changes ----"
 color $blue
-git shortlog -s $1 | sort -n -r | head -n 4
+git shortlog -s "$1" | sort -n -r | head -n 4
 

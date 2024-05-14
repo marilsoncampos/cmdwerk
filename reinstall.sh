@@ -1,8 +1,8 @@
-#!/bin/zsh -e
+#!/bin/zsh 
 
 
-make
-pipx uninstall cmdwerk
-PACKAGE_FILE=$(ls dist/*.whl | grep cmdwerk | head -n 1)
+make build
+pipx uninstall cmdwerk || echo "*** Skipped uninstall ***"
+PACKAGE_FILE=$(ls -1t dist/*.whl | grep cmdwerk | head -n 1)
 pipx install $PACKAGE_FILE
 
