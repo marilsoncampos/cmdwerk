@@ -2,6 +2,8 @@ SHELL:=/usr/bin/env bash
 .DEFAULT_GOAL := build
 
 build: ## Builds package using flit
+	rm ./dist/*.gz
+	rm ./dist/*.whl
 	flit build
 
 install: ## Install package using flit
