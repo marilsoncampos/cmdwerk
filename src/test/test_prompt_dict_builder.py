@@ -5,23 +5,23 @@ from collections import defaultdict
 from cmdwerk.commands.prompt_cmd import build_history_data
 
 
-def stringuify_rec(indent, so_far, a_dict):
+def _stringify_recur(indent, so_far, a_dict):
     """Recursive call transform dicts of dicts into strings"""
     filler = indent * ' '
     for key in sorted(a_dict.keys()):
         value = a_dict[key]
         so_far.append(filler + key)
         if isinstance(value, dict):
-            stringuify_rec(indent+1, so_far, value)
+            _stringify_recur(indent+1, so_far, value)
         elif isinstance(value, set):
             for elem in sorted(value):
                 so_far.append(filler + ' ' + elem)
 
 
-def stringuify(a_dict):
+def _stringify(a_dict):
     """Transform dicts of dicts into strings"""
     so_far = []
-    stringuify_rec(0, so_far, a_dict)
+    _stringify_recur(0, so_far, a_dict)
     return '\n'.join(so_far)
 
 
@@ -38,8 +38,8 @@ def test_prompt_2_levels():
     expected = defaultdict(set, {'git': {'log', 'status', 'checkout'},
                                  'git|_|checkout': {'dev', 'master'}})
     data = build_history_data(['git status', 'git log', 'git checkout master', 'git checkout dev'])
-    expected_str = stringuify(expected)
-    data_str = stringuify(data)
+    expected_str = _stringify(expected)
+    data_str = _stringify(data)
     report_comp_details(expected_str, data_str)
     assert expected_str == data_str
 
@@ -57,8 +57,7 @@ def test_prompt_3_levels():
                                "git commit src -m 'This is a commit'",
                                "git commit src -m 'This is another commit'",
                                ])
-    expected_str = stringuify(expected)
-    data_str = stringuify(data)
+    expected_str = _stringify(expected)
+    data_str = _stringify(data)
     report_comp_details(expected_str, data_str)
     assert expected_str == data_str
-
