@@ -5,6 +5,8 @@ This module contains implementations for guided prompt from your history.
 import os
 import shlex
 import itertools
+import unicodedata
+import string
 from collections import defaultdict
 from typing import List, Tuple
 import pickle
@@ -57,6 +59,12 @@ def build_history_data(cmd_list):
     """
     Builds dictionary with candidate completion at each stage from command list.
     """
+
+    def remove_control_chars(a_string: str) -> str:
+
+        # return filter(string.printable.__contains__, a_string)
+        return "".join(ch for ch in a_string if unicodedata.category(ch)[0] != "C")
+
     results = defaultdict(set)
     for cmd in cmd_list:
         try:
@@ -66,7 +74,8 @@ def build_history_data(cmd_list):
         if not raw_parts:
             continue
         # Ignore commands after a pipe
-        parts = list(itertools.takewhile(lambda x: x != '|', raw_parts))
+        parts = [remove_control_chars(x) for x in (itertools.takewhile(lambda x: x != '|', raw_parts))]
+        parts = [x for x in parts if x]
         done_keys = [parts[0]]
         for idx1 in range(1, len(parts)):
             new_key = build_cmd_key(done_keys)

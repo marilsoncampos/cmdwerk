@@ -2,30 +2,32 @@
 CmdWerk: A minimalist command-line tool to organize your scripts
 
 
-
-
 ### CMD Werk
-
 
 #### 1. Introduction
 
-CmdWerk is a minimalist tool to help manage your personal scripts.
-It has capabilities to extend with the modules. As an example we
-include a module to emit a compact pyenv version report.
+CmdWerk is a minimalist tool that helps you manage your scripts.
+You can also extend it with new modules. 
 
-Your shell scripts should be stored in your $HOME/bin.
-Using CmdWerk you can organize them as groups.
+As an example, we include two modules:
+    1. An interactive prompt that learns from your command history.
+    2. Pyenv report that shows a list of available versions 
 
+It processes your shell scripts stored in your $HOME/bin.
+
+With CmdWerk, you can effortlessly organize your scripts into groups, enhancing your workflow and making script management a breeze.
 
 #### 2. Getting Started
 
-Use this command to package the project and install the newly built package in pipx with this command.
+To install it use this command to package the project and install the newly built package.
 
 ```console
 $ ./reinstall.sh
 ```
 
-Here are the commands included in the reinstall.sh
+**_NOTE:_**: We recommend installing it in pipx (https://github.com/pypa/pipx).
+
+Here are the commands included in the 'reinstall.sh'
 
 ```bash
 #!/bin/bash
@@ -34,7 +36,7 @@ pipx uninstall cmdwerk
 pipx install dist/cmdwerk-0.1.0.tar.gz
 ```
 
-You can get command help using this command.
+You can get the make command help using this command.
 
 ```console
 $ cmdw --help
@@ -50,19 +52,19 @@ As an example, here is a small bash script without the config.
 vi ~/.ssh/config
 ```
 
-And here is the same script documented.
+And here is the same script that is ready to be registered by cmdw.
 
 ```bash
 #!/bin/bash
 
-CMDW_GROUP_NAME='ssh'
-DOC_STR=$(cat <<CMDW_DOC_MARKER
-Edits ssh config file..
-
-CMDW_DOC_MARKER
-)
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='aws & ssh'
+# CMDW_HELP_BEGIN
+# Edits ssh config file.
+# CMDW_HELP_END
 
 vi ~/.ssh/config
+
 ```
 
 #### 4. Adapting python scripts to appear in reports
@@ -98,10 +100,11 @@ A simple python password generator script configured for cmdwerk
 import random
 import string
 
-CMDW_GROUP_NAME='tools'
-# CMDW_DOC_MARKER
+# -- Cmd Werk Config --
+# CMDW_GROUP_NAME='tools'
+# CMDW_HELP_BEGIN
 # Generates passwords example.
-# CMDW_DOC_MARKER
+# CMDW_HELP_END
 
 
 def generate_password(pass_length):
@@ -127,7 +130,7 @@ will produce the following results
 ![bins report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/list_all.png)
 
 
-5.2. List the scripts of a group with long details
+##### 5.2. List the scripts of a group with detailed descriptions
 
 ```bash
 $ cmdw bins --group git
@@ -138,11 +141,25 @@ will produce the following results
 ![bins group report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/list_group.png)
 
 
-#### 6. Commands to report on pyenv
 
-##### 6.1. Commands to list scripts
+##### 5.3. Report the status of script registrations
 
-The list will include only the official python versions
+This report has two parts:
+   a. List of registered scripts and the group its registered under.
+   b. List the scripts not registered.
+
+```bash
+    $ cmdw bins status
+```
+
+will produce the following results
+
+
+![bins report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/registeded_bins.png)
+
+#### 6. Command to emit a Pyenv report
+
+The list will include only the official Python versions
 from version 3.7 or later.
 
 ```bash
@@ -156,28 +173,35 @@ will produce the following results
 
 
 
-### Command list
+#### 7. Commands for the interactive prompt
 
-Check the command line help using:
+##### 7.1. Command to start the interactive prompt
 
-```console
-$ cmdw --help
+```bash
+    $ cmdw ppt
 ```
 
-Here is a list of commands.
+Start typying the command and use 'TAB' to navigate in the dropdown 
+and 'SPACE' to select the current option.
 
-```console
-╒════════════════════════════════════════════════════════════════════════════════════╕
-│ Command             │ Description                                                  │
-╞═════════════════════╪══════════════════════════════════════════════════════════════╡
-│ cmd --help          │ Print command line help for top commands                     │
-├─────────────────────┼──────────────────────────────────────────────────────────────┤
-│ cmdw bins --help    │ Print command line help for the 'bin' command                │
-├─────────────────────┼──────────────────────────────────────────────────────────────┤
-│                     │                                                              │
-╘═════════════════════╧══════════════════════════════════════════════════════════════╛
+'ENTER' exits the app and adds the current command text to the clipboard.
+
+![bins report](https://raw.githubusercontent.com/marilsoncampos/cmdwerk/master/docs/source/_static/ppt_interactive.gif)
+
+
+##### 7.2. Command to sync the prompt data with the history file.
+
+```bash
+    $ cmdw ppt sync
 ```
 
+it will produce a summary report like below:
+
+```bash
+    Saved history data to /Users/mcampos/.cmdwerk/history.bin
+    History lines : 2837
+    Loading errors: 1
+```
 
 # Credits
 

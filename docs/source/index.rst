@@ -11,16 +11,16 @@
 1. Introduction
 ---------------
 
-We engineers face with the need to increase development productivity and keep our scripts organized.
+CmdWerk is a minimalist tool that helps you manage your scripts.
+You can also extend it with new modules.
 
-CmdWerk is a minimalist approach to help manage your personal scripts.
+As an example, we include two modules:
+    1. An interactive prompt that learns from your command history.
+    2. Pyenv report that shows a list of available versions
 
-The code base allows you to register your scripts and also makes it easy to add new modules to the
-tool.
+It processes your shell scripts stored in your $HOME/bin.
 
-As an example we included a module to emit a compact pyenv version report.
-
-The scripts to be registered should be stored in your $HOME/bin.
+With CmdWerk, you can effortlessly organize your scripts into groups, enhancing your workflow and making script management a breeze.
 
 
 2. Getting Started
@@ -61,13 +61,13 @@ And here is the same script documented.
 
     #!/bin/bash
 
-    CMDW_GROUP_NAME='ssh'
-    DOC_STR=$(cat <<CMDW_DOC_MARKER
-    Edits ssh config file..
+    # -- Cmd Werk Config --
+    # CMDW_GROUP_NAME='aws & ssh'
+    # CMDW_HELP_BEGIN
+    # Edits ssh config file.
+    # CMDW_HELP_END
 
-    CMDW_DOC_MARKER
-    )
-
+vi ~/.ssh/config
     vi ~/.ssh/config
 
 
@@ -105,11 +105,11 @@ Here is the modified code.
     import random
     import string
 
-    CMDW_GROUP_NAME='tools'
-    # CMDW_DOC_MARKER
+    # -- Cmd Werk Config --
+    # CMDW_GROUP_NAME='tools'
+    # CMDW_HELP_BEGIN
     # Generates passwords example.
-    # CMDW_DOC_MARKER
-
+    # CMDW_HELP_END
 
     def generate_password(pass_length):
         characters = string.ascii_letters + string.digits + string.punctuation
@@ -135,7 +135,7 @@ will produce the following results
 .. image:: _static/list_all.png
    :align: center
 
-5.2. List the scripts of a group with long details
+5.2. List the scripts of a group with detailed descriptions
 
 .. code-block:: console
 
@@ -167,10 +167,9 @@ will produce the following results
 6. Commands to report on pyenv versions
 ---------------------------------------
 
-6.1. Commands to list scripts
-
-The list will include only the official python versions
+The list will include only the official Python versions
 from version 3.7 or later.
+
 
 .. code-block:: console
 
@@ -181,3 +180,33 @@ will produce the following results
 .. image:: _static/pyenv_list.png
    :align: center
 
+7. Commands for the interactive prompt
+--------------------------------------
+
+7.1. Command to start the interactive prompt
+
+.. code-block:: console
+
+    $ cmdw ppt
+
+Start typying the command and use TAB to navigate in the dropdown and SPACE to select the current option.
+
+'ENTER' exits the app and adds the whole command to the clipboard.
+
+.. image:: _static/ppt_interactive.gif
+   :align: center
+
+
+7.2. Command to sync the prompt data with the history file.
+
+.. code-block:: console
+
+    $ cmdw ppt sync
+
+it will produce a summary report like below:
+
+.. code-block:: console
+
+    Saved history data to /Users/mcampos/.cmdwerk/history.bin
+    History lines : 2837
+    Loading errors: 1
