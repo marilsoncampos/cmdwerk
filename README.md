@@ -31,9 +31,9 @@ Here are the commands included in the 'reinstall.sh'
 
 ```bash
 #!/bin/bash
-make
-pipx uninstall cmdwerk
-pipx install dist/cmdwerk-0.1.0.tar.gz
+uv venv --python=python3.11 .venv && 
+source .venv/bin/activate && 
+uv pip install -e .
 ```
 
 You can get the make command help using this command.

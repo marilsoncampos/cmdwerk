@@ -5,7 +5,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "cmdwerk"
-version = "0.1.0"
+version = "0.1.4"
 readme = "README.md"
 description = "A command-line tool for managing and executing commands"
 authors = [
@@ -17,15 +17,15 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python",
     "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
 ]
 
 
 license = {file = "LICENSE"}
 
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "gitpython>=3.0.0,<4.0.0",
     "click>=8.0,<9.0",
@@ -74,7 +74,7 @@ ignore = ["E402", "E741"]
 known-first-party = ["cmdwerk"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
