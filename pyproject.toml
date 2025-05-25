@@ -1,12 +1,13 @@
 [build-system]
-requires = ["flit_core>=2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
 
 [project]
 name = "cmdwerk"
+version = "0.1.0"
 readme = "README.md"
-dynamic = ["version", "description"]
+description = "A command-line tool for managing and executing commands"
 authors = [
     {name = "Marilson Campos", email = "marilson.campos@gmail.com"},
 ]
@@ -33,6 +34,27 @@ dependencies = [
     "pyperclip>=1.8.2"
 ]
 
+[tool.pdm]
+package-type = "library"
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+lint = [
+    "black>=23.7.0",
+    "ruff>=0.0.285",
+    "mypy>=1.5.0",
+]
+dev = [
+    "pre-commit>=3.3.3",
+]
+docs = [
+    "sphinx>=7.1.0",
+    "sphinx-rtd-theme>=1.3.0",
+]
+
 
 [project.scripts]
 cmdw = "cmdwerk.cli:main"
@@ -42,7 +64,55 @@ Homepage = "https://github.com/marilsoncampos/cmdwerk"
 Documentation = "https://github.com/marilsoncampos/cmdwerk/blob/main/README.md"
 Repository = "https://github.com/marilsoncampos/cmdwerk"
 
-[tool.pylint]
-disable = "fixme, import-error"
+[tool.ruff]
+line-length = 220
+target-version = "py310"
+select = ["E", "F", "B", "I", "UP"]
+ignore = ["E402", "E741"]
 
+[tool.ruff.isort]
+known-first-party = ["cmdwerk"]
 
+[tool.mypy]
+python_version = "3.10"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+strict_optional = true
+
+[tool.pytest.ini_options]
+python_files = ["tests.py", "tests_*.py", "test_*.py"]
+junit_family = "xunit2"
+testpaths = ["test/unit"]
+norecursedirs = [
+    "*.egg",
+    ".eggs",
+    "dist",
+    "build",
+    "docs",
+    ".git",
+    "__pycache__"
+]
+
+[tool.coverage.run]
+branch = true
+dynamic_context = "test_function"
+source = ["cmdwerk"]
+data_file = ".tests-reports/.coverage"
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+sort = "Cover"
+exclude_lines = [
+    "pragma: no cover",
+    "if typing.TYPE_CHECKING",
+    "if TYPE_CHECKING",
+    "raise NotImplementedError"
+]
