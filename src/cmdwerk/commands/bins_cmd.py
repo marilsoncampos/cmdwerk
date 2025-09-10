@@ -107,20 +107,25 @@ class ScriptManager:
         script_full_path = os.path.join(self.script_dir, script_name)
         help_lines = []
         group_name = 'No group'
-        with open(script_full_path, 'r', encoding="utf-8") as in_file:
-            for raw_line in in_file:
-                line = clean_line(raw_line)
-                if state == st_outside_help:
-                    if line.startswith(CMDW_GROUP_TOKEN):
-                        parts = line.split('=')
-                        if len(parts) == 2:
-                            group_name = parts[1]
-                    elif line.startswith(CMDW_HELP_BEGIN):
-                        state = st_inside_help
-                else:  # Case for state == st_inside_help:
-                    if line.startswith(CMDW_HELP_END):
-                        break
-                    help_lines.append(line)
+        
+        try:
+            with open(script_full_path, 'r', encoding="utf-8") as in_file:
+                for raw_line in in_file:
+                    line = clean_line(raw_line)
+                    if state == st_outside_help:
+                        if line.startswith(CMDW_GROUP_TOKEN):
+                            parts = line.split('=')
+                            if len(parts) == 2:
+                                group_name = parts[1]
+                        elif line.startswith(CMDW_HELP_BEGIN):
+                            state = st_inside_help
+                    else:  # Case for state == st_inside_help:
+                        if line.startswith(CMDW_HELP_END):
+                            break
+                        help_lines.append(line)
+        except UnicodeDecodeError:
+            # Skip binary files or files with encoding issues
+            return None, None
 
         short_hlp = help_lines[0] if help_lines else ''
         if short_hlp:
